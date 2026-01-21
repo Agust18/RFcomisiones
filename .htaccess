@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Esto ignora carpetas y archivos que sí existen (CSS, JS, Imágenes)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Esta regla es más flexible: toma lo que venga después de /RFcomisiones/
+# y lo manda al index.php
+RewriteRule ^(.*)$ index.php?pagina=$1 [L,QSA]

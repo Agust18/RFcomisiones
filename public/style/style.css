@@ -1,0 +1,310 @@
+
+    /* Filas con más altura y sin bordes laterales */
+    .table-minimalist tbody tr {
+        border-bottom: 1px solid #f2f2f2;
+        transition: background-color 0.2s ease;
+    }
+    
+    .table-minimalist tbody tr:hover {
+        background-color: #fafafa;
+    }
+
+    /* Celdas con espaciado generoso */
+    .table-minimalist td, .table-minimalist th {
+        padding: 20px 15px !important;
+        border: none;
+    }
+
+    /* Estilo para el ID/Código */
+    .code-badge {
+        font-weight: 700;
+        color: #212529;
+        letter-spacing: -0.5px;
+    }
+
+    
+
+    /* Botones de acción limpios */
+    .btn-action-minimal {
+        background: transparent;
+        border: none;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+       
+    }
+    
+    .btn-action-minimal:hover {
+        transform: translateY(-2px);
+    }
+    
+    .btn-action-minimal.view:hover { color: #0dcaf0; }
+    .btn-action-minimal.edit:hover { color: #ffc107; }
+    .btn-action-minimal.delete:hover { color: #dc3545; }
+
+    
+    /* Botones de acción circulares y coloridos */
+    .btn-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    }
+
+    .btn-circle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Colores específicos según tu estilo anterior */
+    .btn-detalle { background-color: #e1f5fe; color: #03a9f4; } /* Celeste claro */
+    .btn-editar { background-color: #fff8e1; color: #ffc107; }  /* Amarillo claro */
+    .btn-eliminar { background-color: #ffebee; color: #f44336; } /* Rojo claro */
+
+    /* Espaciado de la tabla */
+    .table-espaciada td {
+        padding: 18px 15px !important;
+        vertical-align: middle;
+    }
+
+
+    /* Contenedor con más espacio entre elementos */
+    .contenedor-filtros-scroll {
+        display: flex;
+        overflow-x: auto;
+        gap: 3px; /* Más espacio entre botones */
+        padding: 15px 20px;
+        scrollbar-width: none;
+    }
+    .contenedor-filtros-scroll::-webkit-scrollbar { display: none; }
+
+    /* Botones más grandes y cómodos */
+    .btn-filtro-estado {
+        border: none !important;
+        font-weight: 300;
+        transition: all 0.2s ease;
+        padding: 8px 15px; /* Aumentamos el ancho y alto interno */
+        color: #6c757d;
+        background-color: #f8f9fa;
+        font-size: 0.85rem;
+    }
+
+    /* Buscador con más altura */
+    .search-pill {
+        background-color: #f8f9fa;
+        border: 1px solid #eee !important;
+        padding: 4px 8px; /* Espacio extra interno */
+        transition: all 0.3s ease;
+    }
+    
+    .search-pill .form-control {
+        font-size: 0.9rem;
+    }
+
+   /* Estética y corrección de visibilidad */
+        .filtros-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE */
+        }
+
+        .filtros-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
+
+        .btn-filter {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* En Desktop nos aseguramos que no se corte */
+        @media (min-width: 768px) {
+            .filtros-container {
+                overflow: visible;
+                /* Evita que el justify-content-end corte el inicio */
+            }
+        }
+
+
+
+
+/* Ocultar barra de scroll en Chrome/Safari */
+.d-flex::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ajuste extra para que el texto no se rompa en móvil */
+.btn-filtro-estado {
+    flex: 0 0 auto;
+    /* Evita que los botones se encojan */
+    font-size: 0.85rem;
+    /* Un poco más pequeño para el minimalismo */
+}
+
+.active-filter {
+    border: 1px solid currentColor !important;
+    font-weight: 600;
+}
+
+/* estados del select estado comisionista*/
+.estado-Asignado {
+    background-color: #0dcaf0;
+    color: #000;
+}
+
+.estado-Recogido {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.estado-EnCamino {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.estado-Entregado {
+    background-color: #198754;
+    color: #fff;
+}
+
+.estado-select {
+    transition: background-color .2s ease;
+    width: 140px;
+    /* ancho fijo base */
+    min-width: 110px !important;
+    /* ancho minimo */
+    max-width: 110px !important;
+    text-align: start;
+    font-weight: 300;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* mobile estado select*/
+@media (max-width: 576px) {
+    .estado-select {
+        width: 100px;
+        min-width: 100px !important;
+        max-width: 100px !important;
+        font-size: 0.70rem;
+    }
+}
+
+/*==== cliente STYLES ====*/
+/* Para ocultar la barra de scroll en Chrome/Safari y que se vea limpio */
+.scroll-movil::-webkit-scrollbar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .flex-nowrap {
+        flex-wrap: wrap !important;
+        /* En escritorio vuelve a la normalidad */
+    }
+}
+
+/* Estilo Minimalista Soft */
+.option-card {
+    background-color: #fcfcfc !important;
+    /* Casi blanco */
+    border: 1px solid #f0f0f0 !important;
+    transition: all 0.2s ease;
+}
+
+.selection-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+/* Estado al pasar el mouse */
+.option-card:hover {
+    background-color: #f8f9fa !important;
+    border-color: #e0e0e0 !important;
+}
+
+/* Estado Seleccionado */
+.btn-check:checked+.option-card {
+    background-color: #ffffff !important;
+    border-color: #333333 !important;
+    /* Borde oscuro fino para resaltar */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.btn-check:checked+.option-card .selection-dot {
+    background-color: green;
+    /* El toque de color de tu marca */
+    transform: scale(1.5);
+}
+
+/* Limpieza para móviles */
+@media (max-width: 576px) {
+    .option-card {
+        padding: 1rem !important;
+    }
+}
+
+
+/* ==== SIDEBAR DESKTOP ==== */
+.sidebar {
+    min-height: 100vh;
+    background: #202225;
+}
+
+.sidebar h4 {
+    letter-spacing: 1px;
+    font-weight: 600;
+    padding: 20px 0;
+}
+
+.sidebar .nav-link {
+    color: #cfd2d6;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.sidebar .nav-link.active {
+    background: #4c8bf5;
+    color: #fff !important;
+}
+
+/* Offcanvas header dark fixed */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+}
+
+/* Control del contenido para pantallas grandes */
+main {
+    min-height: 100vh;
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        display: none;
+    }
+}
