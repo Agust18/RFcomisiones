@@ -8,7 +8,7 @@
         La forma más eficiente de registrar, gestionar y asegurar tus pedidos en un solo lugar.
       </p>
       <div class="d-flex flex-wrap gap-3">
-        <a href="index.php?pagina=registro" class="btn btn-primary rounded-pill px-4 py-2 shadow-none"
+        <a href="<?php echo BASE_URL ?>registro" class="btn btn-primary rounded-pill px-4 py-2 shadow-none"
           style="font-size: 0.9rem; font-weight: 500;">
           Empezar gratis
         </a>

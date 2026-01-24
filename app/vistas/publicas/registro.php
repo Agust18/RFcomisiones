@@ -1,4 +1,3 @@
-
 <div class="text-center mb-4">
   <h6 class="text-primary fw-bold text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 2px;">RFcomisiones</h6>
   <h3 class="fw-semibold text-dark" style="letter-spacing: -0.5px;">Crea tu cuenta</h3>
