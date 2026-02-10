@@ -1,15 +1,48 @@
 <?php
-ob_clean(); // Borra cualquier texto o espacio que se haya colado antes
+/**
+ * ESTE ARCHIVO ES EL "PROCESADOR". 
+ * Su única misión es recibir datos, mandarlos a la base de datos y avisar si salió bien.
+ */
+
+// Limpia cualquier espacio en blanco o error previo para que no rompa el JSON
+if (ob_get_level()) ob_end_clean();
+
+// Le avisa al navegador que lo que viene a continuación es un objeto JSON y no una página HTML
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_pedido = $_POST['id_pedido'] ?? null;
+/**
+ * 1. EL FILTRO DE SEGURIDAD (MÉTODO)
+ * Verificamos que los datos vengan por POST (el método seguro para enviar formularios).
+ */
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Error: Se esperaba POST y llegó ' . $_SERVER['REQUEST_METHOD'],
+        'debug_info' => 'Esto pasa si el .htaccess hace una redirección 301'
+    ]);
+    exit;
+}
 
-    $datos_pedido = [
+// Importamos las funciones donde vive "actualizar_pedido_y_direccion"
+require_once __DIR__ . '/../funciones/funciones.php';
+
+/**
+ * 2. RECOLECCIÓN DE DATOS
+ * El $_POST es como una caja que trae todo lo que escribiste en el formulario.
+ */
+$id_pedido = $_POST['id_pedido'] ?? null;
+
+if ($id_pedido) {
+    
+    // Armamos el "Paquete A" (Datos del Pedido)
+    // Buscamos 'descripcion_pedido' que es el NAME que pusimos en el <textarea>
+    $datos_p = [
         'descripcion' => $_POST['descripcion_pedido'] ?? ''
     ];
 
-    $datos_direccion = [
+    // Armamos el "Paquete B" (Datos de la Dirección)
+    // Agrupamos todo lo que va a la tabla de direcciones
+    $datos_d = [
         'calle'         => $_POST['calle'] ?? '',
         'numero'        => $_POST['numero'] ?? '',
         'ciudad'        => $_POST['ciudad'] ?? '',
@@ -17,18 +50,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'referencias'   => $_POST['referencias'] ?? ''
     ];
 
-    if ($id_pedido) {
-        // Verificamos si la función existe antes de llamarla para que no explote el script
-        if (function_exists('actualizar_pedido_y_direccion')) {
-            $resultado = actualizar_pedido_y_direccion($id_pedido, $datos_pedido, $datos_direccion);
-            echo json_encode($resultado);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Error técnico: La función de actualización no fue cargada.']);
-        }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'ID de pedido faltante']);
-    }
+    /**
+     * 3. EL MOMENTO DE LA ACCIÓN
+     * Le pasamos los paquetes a la función que creamos.
+     * $resultado guardará lo que la función devuelva (true o false + mensaje).
+     */
+    $resultado = actualizar_pedido_y_direccion($id_pedido, $datos_p, $datos_d);
+
+    /**
+     * 4. LA RESPUESTA AL JAVASCRIPT
+     * Convertimos el resultado en un texto JSON para que SweetAlert pueda leerlo.
+     * Ejemplo: {"success": true, "message": "Cambios guardados"}
+     */
+    echo json_encode($resultado);
+
 } else {
-    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    // Si por alguna razón el formulario no envió el ID escondido (hidden input)
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Error crítico: No se encontró el ID del pedido en el envío.'
+    ]);
 }
+
+// Cortamos la ejecución aquí para asegurar que no se envíe nada extra
 exit;

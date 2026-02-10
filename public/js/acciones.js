@@ -1,40 +1,54 @@
+/**
+ * Usamos la BASE_URL de tu PHP. 
+ * IMPORTANTE: No usamos 'index.php' en ninguna URL de fetch.
+ */
+const getUrl = (path) => {
+    const base = BASE_URL.endsWith('/') ? BASE_URL : `${BASE_URL}/`;
+    return `${base}${path}`;
+};
+
+// 1. VER DETALLE
 export function verDetallePedido(id) {
     const contentDiv = document.getElementById('modal-body-content');
-    contentDiv.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary"></div></div>';
+    const modalElement = document.getElementById('modalPedidos');
     
-    const modal = new bootstrap.Modal(document.getElementById('modalPedidos'));
+    if (!contentDiv || !modalElement) return console.error("Faltan contenedores de Detalle");
+
+    const modal = new bootstrap.Modal(modalElement);
+    contentDiv.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary"></div></div>';
     modal.show();
 
-    fetch(`index.php?pagina=detalle_pedido&id=${id}`)
+    // Ruta limpia: detalle_pedido?id=X
+    fetch(getUrl(`detalle_pedido?id=${id}`))
         .then(res => res.text())
         .then(html => contentDiv.innerHTML = html)
-        .catch(err => contentDiv.innerHTML = '<div class="p-4 text-danger">Error al cargar detalle.</div>');
+        .catch(err => console.error("Error cargando detalle:", err));
 }
 
+// 2. ABRIR FORMULARIO EDITAR
 export function editarPedido(id) {
     const contentDiv = document.getElementById('contenidoEditar');
-    contentDiv.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-warning"></div></div>';
+    const modalElement = document.getElementById('modalEditar');
     
-    const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+    if (!contentDiv || !modalElement) return console.error("Faltan contenedores de Edición");
+
+    const modal = new bootstrap.Modal(modalElement);
+    contentDiv.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-warning"></div></div>';
     modal.show();
 
-    fetch(`index.php?pagina=form_editar_pedido&id=${id}`)
+    // Ruta limpia: form_editar_pedido?id=X
+    fetch(getUrl(`form_editar_pedido?id=${id}`)) 
         .then(res => res.text())
         .then(html => contentDiv.innerHTML = html)
-        .catch(err => contentDiv.innerHTML = '<div class="p-4 text-danger">Error al cargar formulario.</div>');
+        .catch(err => console.error("Error cargando formulario:", err));
 }
 
-
-
-// 3. ELIMINADO LÓGICO (TACHO)
+// 3. ELIMINADO LÓGICO (POST)
 export function eliminarPedidoLogico(id) {
     Swal.fire({
         title: '¿Mover a la papelera?',
-        text: "El pedido no se borrará, pero dejará de aparecer en tu lista activa.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#6c757d',
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar'
     }).then((result) => {
@@ -42,15 +56,15 @@ export function eliminarPedidoLogico(id) {
             const formData = new FormData();
             formData.append('id_pedido', id);
 
-            fetch('index.php?pagina=eliminar_pedido_logico', {
+            // POST a ruta limpia
+            fetch(getUrl('eliminar_pedido_logico'), {
                 method: 'POST',
                 body: formData
             })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    Swal.fire('Eliminado', data.message, 'success')
-                        .then(() => location.reload());
+                    Swal.fire('Eliminado', data.message, 'success').then(() => location.reload());
                 } else {
                     Swal.fire('Error', data.message, 'error');
                 }
@@ -59,33 +73,29 @@ export function eliminarPedidoLogico(id) {
     });
 }
 
-
-
+// 4. GUARDAR CAMBIOS (SUBMIT DEL FORMULARIO)
 document.addEventListener('submit', function(e) {
     if (e.target && e.target.id === 'formActualizarPedido') {
         e.preventDefault();
         
-        // Bloquear el botón para evitar múltiples clics
         const btn = e.target.querySelector('button[type="submit"]');
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Guardando...';
+        btn.innerHTML = 'Guardando...';
 
         const formData = new FormData(e.target);
 
-        fetch('index.php?pagina=procesar_edicion_action', {
+        // AQUÍ ESTÁ LA MAGIA: 
+        // Llamamos a 'procesar_edicion_action'. 
+        // El .htaccess lo traduce internamente a index.php?pagina=procesar_edicion_action
+        // MANTENIENDO EL POST ORIGINAL.
+        fetch(getUrl('procesar_edicion_action'), {
             method: 'POST',
             body: formData
         })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Actualizado!',
-                    text: data.message,
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => location.reload());
+                Swal.fire('¡Éxito!', data.message, 'success').then(() => location.reload());
             } else {
                 Swal.fire('Error', data.message, 'error');
                 btn.disabled = false;
@@ -93,16 +103,14 @@ document.addEventListener('submit', function(e) {
             }
         })
         .catch(err => {
-            console.error(err);
-            Swal.fire('Error', 'Hubo un fallo en la conexión', 'error');
+            console.error("Error crítico en el POST:", err);
             btn.disabled = false;
             btn.innerHTML = 'Guardar Cambios';
         });
     }
 });
 
-// IMPORTANTE: Exponer funciones al ámbito global (window) 
-// para que el 'onclick' del HTML pueda encontrarlas
+// HACEMOS LAS FUNCIONES GLOBALES
 window.verDetallePedido = verDetallePedido;
 window.editarPedido = editarPedido;
 window.eliminarPedidoLogico = eliminarPedidoLogico;

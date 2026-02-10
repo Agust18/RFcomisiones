@@ -1,16 +1,16 @@
 <?php
 $id = $_GET['id'] ?? null;
 if (!$id) exit("ID no válido");
-$pedido = obtener_pedido_completo_por_id($id); // Usamos la misma función que para el detalle
+$pedido = obtener_pedido_completo_por_id($id); 
 if (!$pedido) exit("Pedido no encontrado");
 ?>
 
-<div class="modal-header border-0 pb-0">
-    <h5 class="fw-bold">Editar Pedido #<?= $pedido['codigo_seguimiento'] ?></h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-</div>
-
 <form id="formActualizarPedido">
+    <div class="modal-header border-0 pb-0">
+        <h5 class="fw-bold">Editar Pedido #<?= $pedido['codigo_seguimiento'] ?></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+
     <div class="modal-body">
         <input type="hidden" name="id_pedido" value="<?= $pedido['id'] ?>">
 
