@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 verificar_acceso('comisionista');
 require_once __DIR__ . '/../../funciones/utilidad.php';
 require_once __DIR__ . '/../../funciones/funciones.php'; // Usa el nombre real de tu archivo de funciones (probablemente 'funciones.php')
@@ -150,8 +153,10 @@ if (isset($_GET['res'])) {
                             'Entregado' => 'Entregados'
                         ];
 
+                        // Obtenemos la búsqueda actual del GET para persistirla si fuera necesario
+                        $q_actual = $_GET['q'] ?? '';
+
                         foreach ($filtros as $valor => $label):
-                            // Usamos $estado_filtro que viene de tu lógica de paginación
                             $es_activo = ($estado_filtro === $valor);
                             $clase_btn = $es_activo ? 'btn-primary shadow active-filter' : 'btn-light border text-muted';
                             ?>

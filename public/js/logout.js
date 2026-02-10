@@ -1,30 +1,34 @@
-
-
-
 export function confirmarCierreSesion(event) {
-    // 1. ESTO ES VITAL: Detiene el comportamiento del <a>
     if (event) {
         event.preventDefault();
         event.stopPropagation();
     }
+
     Swal.fire({
         title: 'Cerrar sesión',
         text: "¿Estás seguro de que deseas cerrar sesión?",
         icon: 'warning',
         showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, salir',
+        cancelButtonText: 'Cancelar',
         showLoaderOnConfirm: true,
         preConfirm: () => {
-    // Usamos la ruta amigable /logout en lugar de index.php?pagina=logout
-    const url = (typeof BASE_URL !== 'undefined') ? BASE_URL + 'logout' : 'logout';
-    
-    return fetch(url, {
-        method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    })
-            .then(response => response.text())
+            // Usamos BASE_URL global. Si no existe, usamos la raíz '/'
+            const urlBase = (typeof BASE_URL !== 'undefined') ? BASE_URL : '/';
+            const urlFetch = urlBase + 'logout';
+            
+            return fetch(urlFetch, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Error en la respuesta del servidor");
+                return response.text();
+            })
             .then(data => {
-                // Intentamos encontrar el JSON incluso si el index.php manda HTML
+                // Limpieza de JSON (por si hay espacios o basura en el buffer de PHP)
                 const inicio = data.indexOf('{');
                 const fin = data.lastIndexOf('}') + 1;
                 if (inicio === -1) throw new Error("Respuesta inválida del servidor");
@@ -33,10 +37,14 @@ export function confirmarCierreSesion(event) {
             .catch(error => {
                 Swal.showValidationMessage(`Error: ${error.message}`);
             });
-        }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
-    if (result.isConfirmed && result.value?.success) {
-    // Forzamos la ruta completa para evitar que salte a la raíz del servidor
-    window.location.href = 'http://localhost/RFcomisiones/login';
-}});
+        if (result.isConfirmed && result.value?.success) {
+            // REDIRECCIÓN DINÁMICA:
+            // Usamos BASE_URL para ir a 'login'. Así evitas el localhost fijo.
+            const urlBase = (typeof BASE_URL !== 'undefined') ? BASE_URL : '/';
+            window.location.href = urlBase + 'login';
+        }
+    });
 }

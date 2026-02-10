@@ -1,9 +1,18 @@
+# 1. Activamos el motor de reescritura
 RewriteEngine On
 
-# Esto ignora carpetas y archivos que sí existen (CSS, JS, Imágenes)
+# 2. Definimos la base (si estás en un Virtual Host es /)
+RewriteBase /
+
+# 3. SEGURIDAD: Impedir que se vean los archivos .php directamente
+# Si alguien intenta entrar a cliente.php, lo manda a la ruta limpia
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# 4. EXCEPCIONES: Si el archivo existe físicamente (CSS, JS, Imágenes), cargalo normal
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Esta regla es más flexible: toma lo que venga después de /RFcomisiones/
-# y lo manda al index.php
+# 5. REGLA DE ORO: Todo lo demás se envía a index.php en la variable 'pagina'
+# El [L] significa que es la última regla, y [QSA] mantiene los ?q=busqueda
 RewriteRule ^(.*)$ index.php?pagina=$1 [L,QSA]

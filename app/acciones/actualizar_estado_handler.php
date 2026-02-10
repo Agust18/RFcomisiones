@@ -1,38 +1,34 @@
 <?php
-//Limpiamos absolutamente todo lo que index.php haya escrito antes (Navbar, espacios, etc)
-while (ob_get_level()) {
-    ob_end_clean();
-}
-//Iniciar buffer nuevo para controlar la salida
+// Limpieza total para asegurar un JSON válido
+while (ob_get_level()) { ob_end_clean(); }
 ob_start();
-//Cabecera JSON
-header('Content-Type: application/json');
-$res = ['success' => false, 'message' => 'Error desconocido'];
-if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    // Asegúrate de que la sesión esté disponible
-    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+header('Content-Type: application/json; charset=utf-8');
 
-    $id_pedido = $_POST['id_pedido'] ?? null;
-    $nuevo_estado = $_POST['nuevo_estado'] ?? null;
-    $id_comisionista = $_SESSION['id_usuario'] ?? null;
+require_once __DIR__ . '/../funciones/funciones.php'; 
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-    if ($id_pedido && $nuevo_estado && $id_comisionista) {
-        // Llamada a tu función (asegúrate que el archivo de funciones esté incluido antes)
-        if (actualizar_estado_pedido($id_pedido, $nuevo_estado, $id_comisionista)) {
-            $res = [
-                'success' => true, 
-                'message' => "¡Estado actualizado a $nuevo_estado!"
-            ];
-        } else {
-            $res['message'] = "Error al actualizar en la base de datos.";
-        }
+// Capturamos todo desde $_REQUEST (que lee GET y POST por igual)
+$id_pedido    = $_REQUEST['id_pedido'] ?? null;
+$nuevo_estado = $_REQUEST['nuevo_estado'] ?? null;
+$id_usuario   = $_SESSION['id_usuario'] ?? null;
+
+if ($id_pedido && $nuevo_estado && $id_usuario) {
+    // Ejecutamos la actualización
+    if (actualizar_estado_pedido($id_pedido, $nuevo_estado, $id_usuario)) {
+        echo json_encode(['success' => true]);
     } else {
-        $res['message'] = "Faltan datos (ID: $id_pedido, Estado: $nuevo_estado, User: $id_comisionista)";
+        echo json_encode(['success' => false, 'message' => 'Error al guardar en Base de Datos']);
     }
+} else {
+    // Diagnóstico final en caso de error
+    $faltantes = [];
+    if (!$id_pedido) $faltantes[] = "ID";
+    if (!$nuevo_estado) $faltantes[] = "Estado";
+    if (!$id_usuario) $faltantes[] = "Sesión";
+    
+    echo json_encode([
+        'success' => false, 
+        'message' => "Faltan: " . implode(", ", $faltantes)
+    ]);
 }
-//Limpiar cualquier basura que se haya colado durante la ejecución (warnings silenciosos)
-ob_clean();
-echo json_encode($res);
-
-// Detener la ejecución para que index.php no escriba nada más
 exit;

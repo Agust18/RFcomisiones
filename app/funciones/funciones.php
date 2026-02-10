@@ -513,7 +513,6 @@ function obtener_pedidos_cerrados($id_comisionista) {
 function actualizar_estado_pedido($id_pedido, $nuevo_estado, $id_comisionista) {
     global $conexion;
 
-    // 1. Verificamos primero quién es el dueño actual del pedido
     $checkSql = "SELECT id_comisionista, estado FROM pedidos WHERE id = ?";
     $stmtCheck = $conexion->prepare($checkSql);
     $stmtCheck->bind_param("i", $id_pedido);
@@ -521,37 +520,32 @@ function actualizar_estado_pedido($id_pedido, $nuevo_estado, $id_comisionista) {
     $resultado = $stmtCheck->get_result()->fetch_assoc();
     $stmtCheck->close();
 
-    if (!$resultado) return false; // El pedido no existe
+    if (!$resultado) return false;
 
-    $dueño_actual = $resultado['id_comisionista'];
+    // Forzamos a que si es NULL en la DB sea 0 para que la comparación no falle
+    $dueño_actual = ($resultado['id_comisionista'] !== null) ? $resultado['id_comisionista'] : 0;
 
-    // 2. Lógica de actualización
-    if ($dueño_actual === null || $dueño_actual == 0) {
-        // Si no tiene dueño, se lo asignamos al que lo está moviendo ahora
+    if ($dueño_actual == 0) {
+        // Caso: Sin dueño -> Asignar
         $sql = "UPDATE pedidos SET estado = ?, id_comisionista = ? WHERE id = ?";
-        $tipos = "sii";
-        $parametros = [$nuevo_estado, $id_comisionista, $id_pedido];
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("sii", $nuevo_estado, $id_comisionista, $id_pedido);
     } else if ($dueño_actual == $id_comisionista) {
-        // Si es el dueño, solo actualizamos el estado
+        // Caso: Es el dueño -> Solo cambiar estado
         $sql = "UPDATE pedidos SET estado = ? WHERE id = ? AND id_comisionista = ?";
-        $tipos = "sii"; // nota: el orden de parámetros abajo es estado, id, comisionista
-        $parametros = [$nuevo_estado, $id_pedido, $id_comisionista];
+        $stmt = $conexion->prepare($sql);
+        // ORDEN CORRECTO: estado (s), id (i), id_comisionista (i)
+        $stmt->bind_param("sii", $nuevo_estado, $id_pedido, $id_comisionista);
     } else {
-        // Si el dueño es otra persona, no permitimos el cambio
-        return false;
+        // Caso: Es de otro -> Bloquear
+        return false; 
     }
 
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param($tipos, ...$parametros);
     $exec = $stmt->execute();
-    $filas = $stmt->affected_rows;
     $stmt->close();
 
-    // Retornamos true si se ejecutó. 
-    // Usamos >= 0 porque si el estado es el mismo, affected_rows es 0 pero no es un error.
     return $exec; 
 }
-
 function contar_pedidos_por_estado($id_comisionista, $estado) {
     global $conexion;
     

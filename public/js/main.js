@@ -20,7 +20,10 @@ import { actualizarEstadoBackground , initFiltrosPedidos} from "./estado-backgro
 import { confirmarCierreSesion } from './logout.js';
 window.confirmarCierreSesion = confirmarCierreSesion;
 
-import { confirmarCambioDinamico , } from './pedidos.js';
+import { confirmarAsignacion , } from './asignacion.js';
+window.confirmarAsignacion = confirmarAsignacion;
+
+import { confirmarCambioDinamico } from './cambiodinamico.js';
 window.confirmarCambioDinamico = confirmarCambioDinamico;
     
     
