@@ -5,14 +5,14 @@ RFcomisiones - Sistema de Gestión de Pedidos y Ventas
 Este es mi primer proyecto real, nacido de la necesidad de organizar y digitalizar el flujo de pedidos de una manera eficiente. Me enfoqué en construir una herramienta que sea fácil de usar pero que por dentro tenga una estructura sólida y profesional.
 
 💡 El Objetivo
-El proyecto centraliza la recepción de pedidos y permite llevar un control claro de los estados de venta. Mi meta principal fue aprender a conectar una base de datos de forma segura y crear una navegación fluida para el usuario.
+El proyecto centraliza la recepción de pedidos y permite llevar un control claro de los estados de los pedidos. Mi meta principal fue aprender a conectar una base de datos de forma segura y crear una navegación fluida para el usuario.
 
 🧠 Decisiones Técnicas y Aprendizajes
 Para este desarrollo, no me conformé con lo básico y decidí implementar soluciones que se usan en entornos profesionales:
 
-Arquitectura de Punto de Entrada Único: Implementé un index.php que centraliza todas las peticiones, permitiéndome gestionar la seguridad y las sesiones de forma global.
+Arquitectura de Punto de Entrada Único: Implementé un index que centraliza todas las peticiones, permitiéndome gestionar la seguridad y las sesiones de forma global.
 
-URLs Profesionales: Configuré rutas amigables mediante .htaccess. Esto hace que el sistema no solo se vea mejor (sin el .php al final), sino que sea más seguro.
+URLs Profesionales: Configuré rutas amigables mediante .htaccess. Esto hace que el sistema no solo se vea mejor, sino que sea más seguro.
 
 Gestión de Estados: Programé la lógica para que los pedidos puedan seguir un flujo de trabajo, permitiendo al administrador tener una visión clara del negocio en tiempo real.
 
@@ -26,6 +26,15 @@ PHP y MySQL: El motor de la aplicación y la gestión de datos.
 JavaScript: Para mejorar la interactividad sin recargar la página constantemente.
 
 Bootstrap 5: Para asegurar que el panel sea cómodo de usar desde cualquier dispositivo.
+
+3. Agregar una sección de "Próximos Pasos (Roadmap)":
+Esto demuestra que tienes visión de crecimiento:
+
+-Implementación de una API para notificaciones por WhatsApp.
+
+-Generación de reportes mensuales en PDF con estadísticas de ventas.
+
+-Integración total con la API de Google Maps para cálculo de distancias.
 
 ¿Cómo probarlo?
 En la carpeta app/config/ dejé un archivo db.php.example con la estructura necesaria para conectar la base de datos. Solo hace falta renombrarlo a db.php y completar los datos locales.
