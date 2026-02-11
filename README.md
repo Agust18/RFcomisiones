@@ -7,6 +7,8 @@ Este es mi primer proyecto real, nacido de la necesidad de organizar y digitaliz
 💡 El Objetivo
 El proyecto centraliza la recepción de pedidos y permite llevar un control claro de los estados de los pedidos. Mi meta principal fue aprender a conectar una base de datos de forma segura y crear una navegación fluida para el usuario.
 
+🛠️Gestión profesional con Git: Me enfoqué en mantener un repositorio limpio y seguro. Realicé una auditoría del historial y configuré un flujo de trabajo con .gitignore para garantizar que toda la información sensible y las credenciales queden protegidas.
+
 🧠 Decisiones Técnicas y Aprendizajes
 Para este desarrollo, no me conformé con lo básico y decidí implementar soluciones que se usan en entornos profesionales:
 
