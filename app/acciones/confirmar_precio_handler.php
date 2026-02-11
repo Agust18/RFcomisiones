@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../funciones/funciones.php'; // Para tener la función confirmar_precio_pedido()
+// require_once '../funciones/funciones.php'; // Para tener la función confirmar_precio_pedido()
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validamos que lleguen los datos
     $id_pedido = isset($_POST['id_pedido']) ? (int)$_POST['id_pedido'] : 0;

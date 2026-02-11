@@ -170,6 +170,12 @@ if (isset($_GET['res'])) {
             </div>
 
             <div class="table-responsive">
+                <pre style="display:none">
+    <?php
+    echo "Contenido de pedidos_en_proceso: ";
+    print_r($pedidos_en_proceso[0] ?? 'ESTÁ VACÍO');
+    ?>
+</pre>
                 <table class="table align-middle mb-0 table-minimalist">
                     <thead>
                         <tr class="text-muted">
@@ -202,12 +208,14 @@ if (isset($_GET['res'])) {
                                                     style="font-size: 0.85rem;">
                                                     <i class="fas fa-map-pin text-danger mt-1 me-2"
                                                         style="font-size: 0.9rem;"></i>
-                                                    <a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($pedido['direccion_entrega']); ?>"
+                                                    <a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($pedido['direccion_entrega'] . ', Chacabuco, Buenos Aires'); ?>"
                                                         target="_blank"
                                                         class="text-muted text-decoration-none d-inline-block text-truncate"
                                                         style="max-width: 250px; border-bottom: 1px dashed #ced4da; transition: all 0.2s;"
                                                         onmouseover="this.style.color='#0d6efd'; this.style.borderBottomColor='#0d6efd'"
                                                         onmouseout="this.style.color='#6c757d'; this.style.borderBottomColor='#ced4da'">
+
+                                                        <i class="fas fa-map-marker-alt text-danger me-1"></i>
                                                         <?= htmlspecialchars($pedido['direccion_entrega'] ?? 'Sin dirección registrada'); ?>
                                                     </a>
                                                 </div>

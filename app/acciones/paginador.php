@@ -43,12 +43,28 @@ $total_registros = $dato_count['total'] ?? 0;
 $total_paginas = ceil($total_registros / $pedidos_per_page);
 
 // 5. Consulta final de pedidos (CON TODAS LAS COLUMNAS)
+// $sql_pedidos = "SELECT 
+//                     p.*, 
+//                     u.nombre AS nombre_cliente, 
+//                     u.telefono AS telefono_cliente 
+//                 FROM pedidos p 
+//                 LEFT JOIN usuarios u ON p.id_usuario = u.id 
+//                 WHERE p.id_comisionista = '$id_comisionista_logeado' 
+//                 AND p.activo = 0 
+//                 $filtro_sql 
+//                 ORDER BY p.fecha_creacion DESC 
+//                 LIMIT $pedidos_per_page OFFSET $offset";
+
 $sql_pedidos = "SELECT 
                     p.*, 
                     u.nombre AS nombre_cliente, 
-                    u.telefono AS telefono_cliente 
+                    u.telefono AS telefono_cliente,
+                    /* UNIMOS LOS CAMPOS DE LA DIRECCIÓN */
+                    CONCAT(IFNULL(d.calle,''), ' ', IFNULL(d.numero,''), ', ', IFNULL(d.ciudad,'')) AS direccion_entrega
                 FROM pedidos p 
                 LEFT JOIN usuarios u ON p.id_usuario = u.id 
+                /* AGREGAMOS EL JOIN A DIRECCIONES */
+                LEFT JOIN direcciones d ON p.id_direccion = d.id 
                 WHERE p.id_comisionista = '$id_comisionista_logeado' 
                 AND p.activo = 0 
                 $filtro_sql 

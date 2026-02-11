@@ -156,7 +156,7 @@ $url_whatsapp = "https://wa.me/" . preg_replace('/[^0-9]/', '', $cliente['telefo
         </div>
 
         <div class="col-md-6 border-start ps-4">
-            <form action="app/acciones/confirmar_precio_handler.php" method="POST">
+            <form action="<?= BASE_URL ?>confirmar_precio" method="POST">
                 <input type="hidden" name="id_pedido" value="<?= $id ?>">
                 <label class="form-label small fw-bold text-primary">Ajustar / Confirmar Precio:</label>
                 <div class="input-group input-group-sm mb-2">

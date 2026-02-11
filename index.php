@@ -85,10 +85,6 @@ switch ($vista) {
         cerrarSession();
         exit;
 
-      
-  
-
-  
     case 'administracion':
         verificar_acceso('administrador');
         $ruta_vista = 'app/vistas/dashboard/main_dashboard.php';
@@ -124,8 +120,18 @@ switch ($vista) {
         verificar_acceso('administrador');
         require_once __DIR__ . '/app/acciones/borrar_pedido_handler.php';
         exit;
-    case 'actualizar_precio_accion':
-        require_once __DIR__ . '/app/acciones/actualizar_precio_handler.php';
+    // case 'actualizar_precio_accion':
+    //     require_once __DIR__ . '/app/acciones/actualizar_precio_handler.php';
+    //     exit;
+    case 'confirmar_precio':
+        require_once __DIR__ . '/app/acciones/confirmar_precio_handler.php';
+
+        if (file_exists($archivo)) {
+        require_once $archivo;
+    } else {
+        die("El archivo no existe en: " . $archivo); // Esto te dirá la verdad
+    }
+    
         exit;
   
 
