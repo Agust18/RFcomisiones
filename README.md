@@ -1,5 +1,5 @@
 # RFcomisiones
-Sistema integral de gestión de pedidos y comisiones desarrollado en PHP y MySQL. Incluye arquitectura de rutas amigables, panel administrativo con filtros avanzados, sistema de paginación dinámica y recuperación de contraseñas mediante tokens de seguridad. Interfaz moderna y responsiva con Bootstrap 5 y SweetAlert2.
+Sistema integral de gestión de pedidos por roles y comisiones desarrollado en PHP y MySQL. Incluye arquitectura de rutas amigables, panel administrativo con filtros avanzados, sistema de paginación dinámica y recuperación de contraseñas mediante tokens de seguridad. Interfaz moderna y responsiva con Bootstrap 5 y SweetAlert2.
 
 RFcomisiones - Sistema de Gestión de Pedidos y Ventas
 Este es mi primer proyecto real, nacido de la necesidad de organizar y digitalizar el flujo de pedidos de una manera eficiente. Me enfoqué en construir una herramienta que sea fácil de usar pero que por dentro tenga una estructura sólida y profesional.
@@ -29,8 +29,7 @@ JavaScript: Para mejorar la interactividad sin recargar la página constantement
 
 Bootstrap 5: Para asegurar que el panel sea cómodo de usar desde cualquier dispositivo.
 
-3. Agregar una sección de "Próximos Pasos (Roadmap)":
-Esto demuestra que tienes visión de crecimiento:
+Sección de Próximos Pasos (Roadmap):
 
 -Implementación de una API para notificaciones por WhatsApp.
 
